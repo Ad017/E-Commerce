@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Florence Foundation Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap');
+        
+        :root {
+            --primary: #6e3b3b;
+            --secondary: #f8f1e5;
+            --accent: #d4a59a;
+        }
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--secondary);
+            color: #333;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .chat-container {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .message {
+            animation: fadeIn 0.3s ease-out;
+            max-width: 85%;
+        }
+        
+        .user-message {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 18px 18px 4px 18px;
+            align-self: flex-end;
+        }
+        
+        .bot-message {
+            background-color: white;
+            border-radius: 18px 18px 18px 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .florence-icon {
+            width: 24px;
+            height: 24px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .floral-divider {
+            position: relative;
+            height: 30px;
+            background: url('https://placehold.co/1600x30/6e3b3b/f8f1e5?text=Florentine+Pattern') center repeat-x;
+            background-size: contain;
+            opacity: 0.8;
+        }
+        
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            margin-right: 4px;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header with Foundation Logo -->
+    <header class="bg-white py-6 shadow-sm">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <img src="https://placehold.co/60x60/f8f1e5/6e3b3b?text=FF&font=playfair" alt="Florence Foundation Logo - Elegant FF monogram in terracotta and cream" class="rounded-full">
+                <h1 class="text-2xl font-bold text-gray-800">Florence Foundation</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#" class="text-gray-600 hover:text-var(--primary) transition">Collections</a>
+                <a href="#" class="text-gray-600 hover:text-var(--primary) transition">Exhibitions</a>
+                <a href="#" class="text-gray-600 hover:text-var(--primary) transition">Research</a>
+                <a href="#" class="text-gray-600 hover:text-var(--primary) transition">Visit</a>
+            </nav>
+            <button class="md:hidden text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </header>
+    
+    <div class="floral-divider"></div>
+    
+    <!-- Main Content -->
+    <main class="flex-1 py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Cultural Dialogue Through Art</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Engage with our Renaissance collection through conversational exploration. Ask about artists, techniques, or historical context.
+                </p>
+            </div>
+            
+            <!-- Chat Interface -->
+            <div class="bg-white chat-container max-w-3xl mx-auto">
+                <!-- Chat Header -->
+                <div class="bg-var(--primary) py-4 px-6 flex items-center">
+                    <div class="florence-icon">FF</div>
+                    <h3 class="ml-3 text-white font-semibold">Florence Assistant</h3>
+                    <div class="ml-auto flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-green-400 rounded-full"></span>
+                        <span class="text-xs text-white">Available</span>
+                    </div>
+                </div>
+                
+                <!-- Chat Messages Area -->
+                <div id="chat-messages" class="h-96 overflow-y-auto p-4 bg-gray-50 flex flex-col space-y-3">
+                    <div class="message bot-message p-4">
+                        <p>Greetings! I'm your Florence Foundation assistant. How may I enlighten you about our Renaissance collections today?</p>
+                    </div>
+                    <div class="message user-message p-4">
+                        <p>Tell me about Botticelli's works in your collection</p>
+                    </div>
+                    <div class="message bot-message p-4">
+                        <p>Our foundation proudly houses three Botticelli masterpieces. Most notable is <em>"Primavera"</em>, showcasing allegorical figures in a garden setting. Would you like details on access or conservation techniques?</p>
+                    </div>
+                </div>
+                
+                <!-- Chat Input -->
+                <div class="bg-white border-t p-4">
+                    <form id="chat-form" class="flex items-center space-x-3">
+                        <input 
+                            type="text" 
+                            id="user-input" 
+                            placeholder="Ask about artists, techniques..." 
+                            class="flex-1 border border-gray-300 rounded-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-var(--accent) focus:border-transparent"
+                        >
+                        <button 
+                            type="submit" 
+                            class="bg-var(--primary) hover:bg-var(--primary-dark) text-white rounded-full p-3 transition duration-300"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Suggested Questions -->
+            <div class="max-w-3xl mx-auto mt-8">
+                <h4 class="text-sm font-semibold text-gray-500 mb-3">QUICK INQUIRIES</h4>
+                <div class="flex flex-wrap gap-3">
+                    <button class="suggestion-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition">Medici family patronage</button>
+                    <button class="suggestion-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition">Fresco techniques</button>
+                    <button class="suggestion-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition">Current exhibitions</button>
+                    <button class="suggestion-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition">Visitor information</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div class="floral-divider"></div>
+    
+    <!-- Footer -->
+    <footer class="bg-var(--primary) text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <img src="https://placehold.co/120x40/f8f1e5/6e3b3b?text=Florence+Foundation&font=playfair" alt="Florence Foundation wordmark in cream on terracotta background" class="h-10">
+                    <p class="mt-2 text-var(--secondary) opacity-80">Preserving Renaissance heritage since 1948</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div>
+                        <h5 class="font-semibold mb-3">Explore</h5>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="hover:underline">Collections</a></li>
+                            <li><a href="#" class="hover:underline">Digital Archives</a></li>
+                            <li><a href="#" class="hover:underline">Educational Programs</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold mb-3">Connect</h5>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="hover:underline">Membership</a></li>
+                            <li><a href="#" class="hover:underline">Donate</a></li>
+                            <li><a href="#" class="hover:underline">Volunteer</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-span-2 md:col-span-1">
+                        <h5 class="font-semibold mb-3">Contact</h5>
+                        <p class="mb-2">Palazzo Medici Riccardi, Florence</p>
+                        <p class="mb-2">+39 055 123 4567</p>
+                        <p>info@florencefoundation.org</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-var(--accent) mt-8 pt-6 text-sm text-center opacity-70">
+                <p>© 2023 Florence Foundation. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatForm = document.getElementById('chat-form');
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const suggestionBtns = document.querySelectorAll('.suggestion-btn');
+            
+            // Sample responses for the chatbot
+            const botResponses = [
+                "The Medici family's patronage was instrumental in commissioning works by Michelangelo, Donatello, and Botticelli.",
+                "Fresco painting involves applying pigment to wet plaster, creating a durable connection as the plaster dries.",
+                "Our current exhibition 'Renaissance Masters' runs through November 30th, featuring works from 1400-1520.",
+                "The gallery is open Tuesday-Sunday from 10am-6pm. Tickets can be reserved in advance online."
+            ];
+            
+            // Function to add a message to the chat
+            function addMessage(text, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message', 'p-4');
+                messageDiv.innerHTML = `<p>${text}</p>`;
+                chatMessages.appendChild(messageDiv);
+                
+                // Scroll to bottom of chat
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to show "typing" indicator
+            function showTypingIndicator() {
+                const indicator = document.createElement('div');
+                indicator.classList.add('message', 'bot-message', 'p-4', 'typing-indicator');
+                indicator.innerHTML = '<div class="flex items-center space-x-1"><span></span><span></span><span></span></div>';
+                chatMessages.appendChild(indicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                return indicator;
+            }
+            
+            // Function to remove typing indicator
+            function removeTypingIndicator(indicator) {
+                if (indicator && indicator.parentNode) {
+                    indicator.parentNode.removeChild(indicator);
+                }
+            }
+            
+            // Handle form submission
+            chatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const message = userInput.value.trim();
+                
+                if (message) {
+                    // Add user message
+                    addMessage(message, true);
+                    userInput.value = '';
+                    
+                    // Show typing indicator
+                    const typing = showTypingIndicator();
+                    
+                    // Simulate bot response delay
+                    setTimeout(() => {
+                        removeTypingIndicator(typing);
+                        
+                        // Random response from our sample for demo purposes
+                        const response = botResponses[Math.floor(Math.random() * botResponses.length)];
+                        addMessage(response);
+                        
+                        // In a real implementation, you would call an API here
+                    }, 1500);
+                }
+            });
+            
+            // Add click handlers to suggestion buttons
+            suggestionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    userInput.value = this.textContent;
+                    userInput.focus();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
